@@ -1,26 +1,21 @@
 {
   "asset_generation": {
-    "character": "flux_schnell_full_text_to_image",
-    "character_multiangle": "flux_schnell_full_text_to_image",
-    "scene": "flux_schnell_full_text_to_image",
-    "prop": "flux_schnell_full_text_to_image",
-    "enhance": "utility_seedvr2_7b_int8_upscale_image"
+    "character": "image_flux2_klein_text_to_image",
+    "character_multiangle": "image_flux2_klein_text_to_image",
+    "scene": "image_flux2_klein_text_to_image",
+    "prop": "image_flux2_klein_text_to_image"
   },
   "storyboard": {
-    "default": "image_qwen_image_2512_with_2steps_lora",
-    "fast": "flux_schnell_full_text_to_image"
+    "default": "image_flux2_klein_text_to_image",
+    "fast": "image_flux2_klein_text_to_image"
   },
   "video_generation": {
     "i2v": "video_minimax_h3_i2v",
     "i2v_alternative": "video_minimax_h3_i2v",
-    "i2v_first_last_frame": "video_wan2_2_14B_flf2v",
+    "i2v_first_last_frame": "video_minimax_h3_i2v",
     "r2v": "video_minimax_h3_r2v",
-    "r2v_v4": "video_wan_vace_14B_ref2v",
-    "ltx_optimized": "video_ltx2_i2v",
-    "ltx_high_dynamic": "video_ltx2_i2v"
-  },
-  "audio_generation": {
-    "voice_clone": "audio-chatterbox_tts"
+    "r2v_v4": "video_minimax_h3_r2v",
+    "t2v": "video_minimax_h3_t2v"
   },
   "llm_generation": {
     "text_gen": "llm_qwen3_5_text_gen"
@@ -33,22 +28,6 @@
     "image": "image"
   },
   "templates": {
-    "flux_schnell_full_text_to_image": {
-      "node_mapping": {
-        "positive_prompt": ["41:clip_l", "41:t5xxl"],
-        "seed": "31:seed",
-        "width": "27:width",
-        "height": "27:height"
-      }
-    },
-    "image_qwen_image_2512_with_2steps_lora": {
-      "node_mapping": {
-        "positive_prompt": "108:text",
-        "seed": "106:seed",
-        "width": "107:width",
-        "height": "107:height"
-      }
-    },
     "video_minimax_h3_i2v": {
       "node_mapping": {
         "image": "137:image",
@@ -62,34 +41,14 @@
         "duration": "131:values.a",
         "seed": "129:noise_seed"
       }
-    },
-    "video_wan_vace_14B_ref2v": {
-      "node_mapping": {
-        "reference_image": "73:image",
-        "seed": "108:seed"
-      }
-    },
-    "video_wan2_2_14B_flf2v": {
-      "node_mapping": {
-        "image": "80:image",
-        "end_image": "89:image",
-        "seed": "84:noise_seed"
-      }
     }
   },
   "model_overrides": {
-    "comfyui-flux-schnell-t2i": "flux_schnell_full_text_to_image",
-    "comfyui-flux-schnell-i2i": "flux_schnell_full_text_to_image",
-    "comfyui-flux-schnell-image": "flux_schnell_full_text_to_image",
-    "comfyui-qwen-image-t2i": "image_qwen_image_2512_with_2steps_lora",
+    "comfyui-flux2-klein-t2i": "image_flux2_klein_text_to_image",
+    "comfyui-flux2-klein-i2i": "image_flux2_klein_image_edit_4b_distilled",
+    "comfyui-flux2-klein-image": "image_flux2_klein_text_to_image",
     "comfyui-h3-i2v": "video_minimax_h3_i2v",
     "comfyui-h3-r2v": "video_minimax_h3_r2v",
-    "comfyui-wan-vace-r2v": "video_wan_vace_14B_ref2v",
-    "comfyui-wan2.2-flf2v": "video_wan2_2_14B_flf2v",
-    "comfyui-wan2.2-t2i": "flux_schnell_full_text_to_image",
-    "comfyui-wan2.2-i2i": "flux_schnell_full_text_to_image",
-    "comfyui-wan2.2-i2v": "video_minimax_h3_i2v",
-    "comfyui-wan2.2-r2v": "video_minimax_h3_r2v",
-    "comfyui-ltx2.3-i2v": "video_ltx2_i2v"
+    "comfyui-h3-t2v": "video_minimax_h3_t2v"
   }
 }

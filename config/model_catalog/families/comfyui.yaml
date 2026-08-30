@@ -16,6 +16,7 @@ supported_modalities:
   - image
   - i2v
   - r2v
+  - t2v
 transport:
   image_input_mode:
     comfyui: comfyui_local_upload
@@ -27,161 +28,24 @@ docs:
   official_snapshot_ids:
     - comfyui/2026-08-30
 models:
-  # ── Wan 2.2 image (T2I / I2I) ─────────────────────────────────────
-  - id: comfyui/comfyui-wan2.2-image
-    display_name: ComfyUI Wan 2.2 图像
-    description: 本地 ComfyUI 工作流驱动的文生图/图生图（C16 短剧文生图等）
+  # ── Flux 2 Klein 4B image (T2I / I2I) ─────────────────────────────
+  - id: comfyui/comfyui-flux2-klein-image
+    display_name: ComfyUI Flux 2 Klein 图像
+    description: 本地 Flux 2 Klein 4B 文生图/图生图（轻量快速，3090 友好）
     status: active
     release_stage: local
     docs:
       context_hub_doc_ids: [comfyui/workflows]
     modes:
       t2i:
-        legacy_id: comfyui-wan2.2-t2i
-        display_name: ComfyUI Wan 2.2 文生图
-        description: 本地 T2I 图像生成，工作流可在 config/workflow_mapping.json 配置
+        legacy_id: comfyui-flux2-klein-t2i
+        display_name: ComfyUI Flux 2 Klein T2I
+        description: 本地文生图（Flux 2 Klein 4B）
         capabilities: [t2i]
         ui:
           selection_group: t2i
           visible_in: [project_settings, series_settings, global_settings]
-          order: 160
-          badges: [local]
-        params:
-          size:
-            options: ["1024*1024", "1024*576", "576*1024", "1280*1280"]
-            default: "1024*1024"
-          negativePrompt: true
-          seed: true
-      i2i:
-        legacy_id: comfyui-wan2.2-i2i
-        display_name: ComfyUI Wan 2.2 图生图
-        description: 本地 I2I 图像编辑/角色一致性生成
-        capabilities: [i2i]
-        ui:
-          selection_group: i2i
-          visible_in: [project_settings, series_settings, global_settings]
-          order: 160
-          badges: [local]
-        params:
-          size:
-            options: ["1024*1024", "1024*576", "576*1024", "1280*1280"]
-            default: "1024*1024"
-          negativePrompt: true
-          seed: true
-        inputs:
-          reference_images:
-            max: 4
-
-  # ── Wan 2.2 video (I2V / R2V) ─────────────────────────────────────
-  - id: comfyui/comfyui-wan2.2-video
-    display_name: ComfyUI Wan 2.2 视频
-    description: 本地 ComfyUI 工作流驱动的图生视频/动作迁移（G03 SmoothMix、P02/P07 Animate 等）
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      i2v:
-        legacy_id: comfyui-wan2.2-i2v
-        display_name: ComfyUI Wan 2.2 I2V
-        description: 本地图生视频（首帧驱动），默认 G03 工作流
-        capabilities: [i2v]
-        ui:
-          selection_group: i2v
-          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
-          order: 160
-          badges: [local]
-        duration:
-          type: slider
-          min: 2
-          max: 10
-          step: 1
-          default: 5
-        params:
-          resolution:
-            options: [720p, 1080p]
-            default: 720p
-          seed: true
-          negativePrompt: true
-        inputs:
-          reference_images:
-            max: 1
-            reference_type: image
-      r2v:
-        legacy_id: comfyui-wan2.2-r2v
-        display_name: ComfyUI Wan 2.2 R2V
-        description: 本地参考视频驱动生成（动作迁移），默认 P02/P07 工作流
-        capabilities: [r2v]
-        ui:
-          selection_group: r2v
-          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
-          order: 160
-          badges: [local]
-        duration:
-          type: slider
-          min: 3
-          max: 10
-          step: 1
-          default: 5
-        params:
-          seed: true
-          negativePrompt: true
-        inputs:
-          reference_images:
-            max: 1
-            reference_type: video
-
-  # ── LTX 2.3 video (I2V) ───────────────────────────────────────────
-  - id: comfyui/comfyui-ltx2.3-video
-    display_name: ComfyUI LTX 2.3 视频
-    description: 本地 LTX2.3 图生视频（H17/H28 工作流），速度优先的备选
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      i2v:
-        legacy_id: comfyui-ltx2.3-i2v
-        display_name: ComfyUI LTX 2.3 I2V
-        description: 本地 LTX2.3 图生视频
-        capabilities: [i2v]
-        ui:
-          selection_group: i2v
-          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
-          order: 150
-          badges: [local]
-        duration:
-          type: slider
-          min: 2
-          max: 10
-          step: 1
-          default: 5
-        params:
-          seed: true
-          negativePrompt: true
-        inputs:
-          reference_images:
-            max: 1
-            reference_type: image
-
-  # ── Flux Schnell image (T2I) ───────────────────────────────────────
-  - id: comfyui/comfyui-flux-schnell-image
-    display_name: ComfyUI Flux.1 Schnell 图像
-    description: 本地 Flux.1 Schnell 文生图（4 步快速出图，3090 友好）
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      t2i:
-        legacy_id: comfyui-flux-schnell-t2i
-        display_name: ComfyUI Flux.1 Schnell T2I
-        description: 本地文生图，4 步采样，质量/速度均衡
-        capabilities: [t2i]
-        ui:
-          selection_group: t2i
-          visible_in: [project_settings, series_settings, global_settings]
-          order: 170
+          order: 200
           badges: [local]
         params:
           size:
@@ -189,14 +53,14 @@ models:
             default: "1024*1024"
           seed: true
       i2i:
-        legacy_id: comfyui-flux-schnell-i2i
-        display_name: ComfyUI Flux.1 Schnell I2I
-        description: 本地图生图（复用文生图工作流，参考图作为提示词上下文）
+        legacy_id: comfyui-flux2-klein-i2i
+        display_name: ComfyUI Flux 2 Klein I2I
+        description: 本地图生图（Flux 2 Klein 4B Edit）
         capabilities: [i2i]
         ui:
           selection_group: i2i
           visible_in: [project_settings, series_settings, global_settings]
-          order: 170
+          order: 200
           badges: [local]
         params:
           size:
@@ -207,14 +71,14 @@ models:
           reference_images:
             max: 1
       image:
-        legacy_id: comfyui-flux-schnell-image
-        display_name: ComfyUI Flux.1 Schnell Image
+        legacy_id: comfyui-flux2-klein-image
+        display_name: ComfyUI Flux 2 Klein Image
         description: 本地图像生成（T2I/I2I 通用）
         capabilities: [t2i, i2i]
         ui:
           selection_group: image
           visible_in: [project_settings, series_settings, global_settings]
-          order: 170
+          order: 200
           badges: [local]
         params:
           size:
@@ -225,35 +89,10 @@ models:
           reference_images:
             max: 1
 
-  # ── Qwen-Image 2512 (T2I, 2-step LoRA) ────────────────────────────
-  - id: comfyui/comfyui-qwen-image-image
-    display_name: ComfyUI Qwen-Image 2512 图像
-    description: 本地 Qwen-Image 2512 + 2 步 LoRA，中文文字渲染强
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      t2i:
-        legacy_id: comfyui-qwen-image-t2i
-        display_name: ComfyUI Qwen-Image 2512 T2I
-        description: 高质量文生图（20B fp8 + 2 步 LoRA，3090 可跑）
-        capabilities: [t2i]
-        ui:
-          selection_group: t2i
-          visible_in: [project_settings, series_settings, global_settings]
-          order: 165
-          badges: [local]
-        params:
-          size:
-            options: ["1024*1024", "1328*1328", "832*1216", "1216*832"]
-            default: "1024*1024"
-          seed: true
-
-  # ── MiniMax H3 video (I2V / R2V) ──────────────────────────────────
+  # ── MiniMax H3 video (I2V / R2V / T2V) ────────────────────────────
   - id: comfyui/comfyui-minimax-h3-video
     display_name: ComfyUI MiniMax H3 视频
-    description: 本地 MiniMax H3（int8）图生视频/参考生视频，2K + 原生音轨
+    description: 本地 MiniMax H3（int8）图生视频/参考生视频/文生视频，2K + 原生音轨
     status: active
     release_stage: local
     docs:
@@ -303,69 +142,21 @@ models:
           reference_images:
             max: 3
             reference_type: video
-
-  # ── Wan VACE video (R2V) ───────────────────────────────────────────
-  - id: comfyui/comfyui-wan-vace-video
-    display_name: ComfyUI Wan VACE 14B 视频
-    description: 本地 Wan VACE 14B 参考生视频（平铺工作流，可转换）
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      r2v:
-        legacy_id: comfyui-wan-vace-r2v
-        display_name: ComfyUI Wan VACE 14B R2V
-        description: 参考图/视频混合引导的参考生视频
-        capabilities: [r2v]
+      t2v:
+        legacy_id: comfyui-h3-t2v
+        display_name: ComfyUI MiniMax H3 T2V
+        description: 文生视频（复用 FL2VA int8，无需额外权重）
+        capabilities: [t2v]
         ui:
-          selection_group: r2v
-          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
-          order: 170
+          selection_group: t2v
+          visible_in: [project_settings, series_settings, global_settings]
+          order: 180
           badges: [local]
         duration:
           type: slider
-          min: 3
-          max: 10
+          min: 5
+          max: 15
           step: 1
           default: 5
         params:
           seed: true
-          negativePrompt: true
-        inputs:
-          reference_images:
-            max: 1
-            reference_type: image
-
-  # ── Wan 2.2 14B First-Last-Frame (I2V) ────────────────────────────
-  - id: comfyui/comfyui-wan2.2-flf-video
-    display_name: ComfyUI Wan 2.2 14B 首尾帧
-    description: 本地 Wan 2.2 14B 首尾帧视频（fp8，平铺工作流）
-    status: active
-    release_stage: local
-    docs:
-      context_hub_doc_ids: [comfyui/workflows]
-    modes:
-      i2v:
-        legacy_id: comfyui-wan2.2-flf2v
-        display_name: ComfyUI Wan 2.2 首尾帧 I2V
-        description: 首帧+尾帧约束的视频生成
-        capabilities: [i2v]
-        ui:
-          selection_group: i2v
-          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
-          order: 165
-          badges: [local]
-        duration:
-          type: slider
-          min: 2
-          max: 10
-          step: 1
-          default: 5
-        params:
-          seed: true
-          negativePrompt: true
-        inputs:
-          reference_images:
-            max: 2
-            reference_type: image

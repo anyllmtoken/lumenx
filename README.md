@@ -214,11 +214,12 @@ COMFYUI_TTS_ENABLED=1
 
 | 模型 ID | 能力 | 默认工作流 |
 |---------|------|------------|
-| `comfyui-wan2.2-t2i` | 文生图 | C16 短剧文生图专用 |
-| `comfyui-wan2.2-i2i` | 图生图 | B13 角色一键多角度 |
-| `comfyui-wan2.2-i2v` | 图生视频 | G03 Wan2.2 SmoothMix |
-| `comfyui-wan2.2-r2v` | 动作迁移 | P02 Wan2.2 Animate |
-| `comfyui-ltx2.3-i2v` | 图生视频 | H17 LTX2.3 |
+| `comfyui-flux2-klein-t2i` | 文生图 | image_flux2_klein_text_to_image |
+| `comfyui-flux2-klein-i2i` | 图生图 | image_flux2_klein_image_edit_4b_distilled |
+| `comfyui-flux2-klein-image` | 图像通用 | image_flux2_klein_text_to_image |
+| `comfyui-h3-i2v` | 图生视频 | video_minimax_h3_i2v |
+| `comfyui-h3-r2v` | 参考生视频 | video_minimax_h3_r2v |
+| `comfyui-h3-t2v` | 文生视频 | video_minimax_h3_t2v |
 
 > ComfyUI 支持任意已安装的模型：这些 ID 只是「功能 → 工作流」的入口标签，真正使用哪个底模由工作流决定。想用新模型，改 `workflow_mapping.json` 或在 `config/model_catalog/families/comfyui.yaml` 增加条目即可。
 

@@ -1,8 +1,8 @@
 version: 1
 defaults:
   model_settings:
-    t2i_model: comfyui-flux-schnell-t2i
-    i2i_model: comfyui-flux-schnell-i2i
+    t2i_model: comfyui-flux2-klein-t2i
+    i2i_model: comfyui-flux2-klein-i2i
     i2v_model: comfyui-h3-i2v
     r2v_model: comfyui-h3-r2v
-    image_model: comfyui-flux-schnell-image
+    image_model: comfyui-flux2-klein-image

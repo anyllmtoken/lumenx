@@ -68,7 +68,7 @@ class TestComfyUIImageModel:
         path, duration = model.generate(
             "a cinematic scene",
             str(out),
-            model_name="comfyui-flux-schnell-t2i",
+            model_name="comfyui-flux2-klein-t2i",
             size="1024*1024",
         )
 
@@ -76,9 +76,8 @@ class TestComfyUIImageModel:
         assert os.path.exists(out)
         assert duration >= 0
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "flux_schnell_full_text_to_image"
-        assert submitted["parameters"]["27:width"] == 1024
-        assert submitted["parameters"]["27:height"] == 1024
+        assert submitted["workflow_id"] == "image_flux2_klein_text_to_image"
+        assert submitted["parameters"]["size"] == "1024*1024"
 
     def test_generate_i2i_uploads_reference(self, fake_client, tmp_path):
         model = ComfyUIImageModel({})
@@ -90,32 +89,13 @@ class TestComfyUIImageModel:
             "same character",
             str(out),
             ref_image_path=str(ref),
-            model_name="comfyui-flux-schnell-i2i",
+            model_name="comfyui-flux2-klein-i2i",
         )
 
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "flux_schnell_full_text_to_image"
+        assert submitted["workflow_id"] == "image_flux2_klein_image_edit_4b_distilled"
         assert "reference_image_0" in submitted["upload_files"]
         assert submitted["upload_files"]["reference_image_0"] == str(ref)
-
-    def test_flux_template_node_mapping(self, fake_client, tmp_path):
-        model = ComfyUIImageModel({})
-        out = tmp_path / "flux.png"
-
-        model.generate(
-            "hello world",
-            str(out),
-            model_name="comfyui-flux-schnell-t2i",
-            seed=7,
-            size="1152*896",
-        )
-
-        params = fake_client.submitted[-1]["parameters"]
-        assert params["41:clip_l"] == "hello world"
-        assert params["41:t5xxl"] == "hello world"
-        assert params["31:seed"] == 7
-        assert params["27:width"] == 1152
-        assert params["27:height"] == 896
 
 
 class TestComfyUIVideoModel:
@@ -129,7 +109,7 @@ class TestComfyUIVideoModel:
             "camera pans left",
             str(out),
             img_path=str(image),
-            model_name="comfyui-wan2.2-i2v",
+            model_name="comfyui-h3-i2v",
             duration=5,
             seed=123,
         )
@@ -154,7 +134,7 @@ class TestComfyUIVideoModel:
             "mirror the reference motion",
             str(out),
             img_path=str(image),
-            model_name="comfyui-wan2.2-r2v",
+            model_name="comfyui-h3-r2v",
             generation_mode="r2v",
             ref_video_urls=[str(ref_video)],
         )
@@ -162,21 +142,6 @@ class TestComfyUIVideoModel:
         submitted = fake_client.submitted[-1]
         assert submitted["workflow_id"] == "video_minimax_h3_r2v"
         assert submitted["parameters"]["reference_videos"] == ["ref.mp4"]
-
-    def test_ltx_workflow_override(self, fake_client, tmp_path):
-        model = ComfyUIVideoModel({})
-        out = tmp_path / "ltx.mp4"
-        image = tmp_path / "frame.png"
-        image.write_bytes(b"frame")
-
-        model.generate(
-            "fast clip",
-            str(out),
-            img_path=str(image),
-            model_name="comfyui-ltx2.3-i2v",
-        )
-
-        assert fake_client.submitted[-1]["workflow_id"] == "video_ltx2_i2v"
 
     def test_h3_template_node_mapping(self, fake_client, tmp_path):
         model = ComfyUIVideoModel({})

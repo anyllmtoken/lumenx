@@ -30,9 +30,9 @@ class TestModelCatalog:
         # Defaults point at the local ComfyUI family (Flux Schnell for
         # images, MiniMax H3 for video) — the all-local default setup.
         assert catalog["defaults"]["model_settings"] == {
-            "t2i_model": "comfyui-flux-schnell-t2i",
-            "i2i_model": "comfyui-flux-schnell-i2i",
-            "image_model": "comfyui-flux-schnell-image",
+            "t2i_model": "comfyui-flux2-klein-t2i",
+            "i2i_model": "comfyui-flux2-klein-i2i",
+            "image_model": "comfyui-flux2-klein-image",
             "i2v_model": "comfyui-h3-i2v",
             "r2v_model": "comfyui-h3-r2v",
         }
@@ -136,8 +136,8 @@ class TestModelCatalog:
     def test_default_model_settings_come_from_catalog(self):
         defaults = get_default_model_settings(MODEL_CATALOG_ROOT)
 
-        assert defaults.t2i_model == "comfyui-flux-schnell-t2i"
-        assert defaults.i2i_model == "comfyui-flux-schnell-i2i"
+        assert defaults.t2i_model == "comfyui-flux2-klein-t2i"
+        assert defaults.i2i_model == "comfyui-flux2-klein-i2i"
         assert defaults.i2v_model == "comfyui-h3-i2v"
         assert defaults.r2v_model == "comfyui-h3-r2v"
 
@@ -148,7 +148,7 @@ class TestModelCatalog:
 
         assert report.ok is True
         assert report.errors == ()
-        assert report.stats["defaults"]["t2i_model"] == "comfyui-flux-schnell-t2i"
+        assert report.stats["defaults"]["t2i_model"] == "comfyui-flux2-klein-t2i"
         assert report.stats["surface_summary"]["video_sidebar"]["i2v"]
 
     def test_validation_report_detects_frontend_catalog_drift(self):

@@ -214,11 +214,12 @@ Native ComfyUI (`standard`) is the default: drop an exported workflow JSON into 
 
 | Model ID | Capability | Default Workflow |
 |----------|-----------|------------------|
-| `comfyui-wan2.2-t2i` | Text-to-image | C16 short-drama text-to-image |
-| `comfyui-wan2.2-i2i` | Image-to-image | B13 character multi-angle |
-| `comfyui-wan2.2-i2v` | Image-to-video | G03 Wan2.2 SmoothMix |
-| `comfyui-wan2.2-r2v` | Motion transfer | P02 Wan2.2 Animate |
-| `comfyui-ltx2.3-i2v` | Image-to-video | H17 LTX2.3 |
+| `comfyui-flux2-klein-t2i` | Text-to-image | image_flux2_klein_text_to_image |
+| `comfyui-flux2-klein-i2i` | Image-to-image | image_flux2_klein_image_edit_4b_distilled |
+| `comfyui-flux2-klein-image` | Image (general) | image_flux2_klein_text_to_image |
+| `comfyui-h3-i2v` | Image-to-video | video_minimax_h3_i2v |
+| `comfyui-h3-r2v` | Reference-to-video | video_minimax_h3_r2v |
+| `comfyui-h3-t2v` | Text-to-video | video_minimax_h3_t2v |
 
 > ComfyUI can run any model you have installed: these IDs are just "feature → workflow" entry labels; the actual checkpoint is decided by the workflow. To use a new model, edit `workflow_mapping.json` or add an entry under `config/model_catalog/families/comfyui.yaml`.
 

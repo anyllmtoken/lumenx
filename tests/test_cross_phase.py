@@ -286,7 +286,7 @@ class TestModelSettingsIntegration:
         assert isinstance(s.model_settings, ModelSettings)
         # Defaults follow the catalog (all-local: Flux Schnell for images,
         # MiniMax H3 for video).
-        assert s.model_settings.t2i_model == "comfyui-flux-schnell-t2i"
+        assert s.model_settings.t2i_model == "comfyui-flux2-klein-t2i"
         assert s.model_settings.i2v_model == "comfyui-h3-i2v"
 
     def test_update_series_model_settings_via_pipeline(self, pipeline):
@@ -297,7 +297,7 @@ class TestModelSettingsIntegration:
         assert updated.model_settings.t2i_model == "custom-t2i"
         assert updated.model_settings.i2v_model == "kling-1.6"
         # Other fields keep catalog defaults.
-        assert updated.model_settings.i2i_model == "comfyui-flux-schnell-i2i"
+        assert updated.model_settings.i2i_model == "comfyui-flux2-klein-i2i"
 
     def test_update_series_model_settings_partial_via_copy(self, pipeline):
         """Partial update via model_copy should preserve other fields."""
@@ -306,7 +306,7 @@ class TestModelSettingsIntegration:
         updated_ms = current_ms.model_copy(update={"t2i_model": "new-model"})
         updated = pipeline.update_series(s.id, {"model_settings": updated_ms})
         assert updated.model_settings.t2i_model == "new-model"
-        assert updated.model_settings.i2i_model == "comfyui-flux-schnell-i2i"  # preserved
+        assert updated.model_settings.i2i_model == "comfyui-flux2-klein-i2i"  # preserved
         assert updated.model_settings.storyboard_aspect_ratio == "16:9"  # preserved
 
     def test_model_settings_not_overwritten_by_id_or_created_at(self, pipeline):
