@@ -1,6 +1,8 @@
 {
   "compat": {
     "legacy_model_ids": {
+      "comfyui-flux-schnell-i2i": "comfyui/comfyui-flux-schnell-image#i2i",
+      "comfyui-flux-schnell-image": "comfyui/comfyui-flux-schnell-image#image",
       "comfyui-flux-schnell-t2i": "comfyui/comfyui-flux-schnell-image#t2i",
       "comfyui-h3-i2v": "comfyui/comfyui-minimax-h3-video#i2v",
       "comfyui-h3-r2v": "comfyui/comfyui-minimax-h3-video#r2v",
@@ -55,18 +57,18 @@
   },
   "defaults": {
     "canonical_model_settings": {
-      "i2i_model": "wan/wan2.7-image-pro#image",
-      "i2v_model": "happyhorse/happyhorse-1.1-video#i2v",
-      "image_model": "wan/wan2.7-image-pro#image",
-      "r2v_model": "happyhorse/happyhorse-1.1-video#r2v",
-      "t2i_model": "wan/wan2.7-image-pro#image"
+      "i2i_model": "comfyui/comfyui-flux-schnell-image#i2i",
+      "i2v_model": "comfyui/comfyui-minimax-h3-video#i2v",
+      "image_model": "comfyui/comfyui-flux-schnell-image#image",
+      "r2v_model": "comfyui/comfyui-minimax-h3-video#r2v",
+      "t2i_model": "comfyui/comfyui-flux-schnell-image#t2i"
     },
     "model_settings": {
-      "i2i_model": "wan2.7-image-pro",
-      "i2v_model": "happyhorse-1.1-i2v",
-      "image_model": "wan2.7-image-pro",
-      "r2v_model": "happyhorse-1.1-r2v",
-      "t2i_model": "wan2.7-image-pro"
+      "i2i_model": "comfyui-flux-schnell-i2i",
+      "i2v_model": "comfyui-h3-i2v",
+      "image_model": "comfyui-flux-schnell-image",
+      "r2v_model": "comfyui-h3-r2v",
+      "t2i_model": "comfyui-flux-schnell-t2i"
     }
   },
   "families": {
@@ -86,6 +88,8 @@
       },
       "family": "comfyui",
       "models": [
+        "comfyui-flux-schnell-i2i",
+        "comfyui-flux-schnell-image",
         "comfyui-flux-schnell-t2i",
         "comfyui-h3-i2v",
         "comfyui-h3-r2v",
@@ -539,9 +543,13 @@
       "family": "comfyui",
       "id": "comfyui/comfyui-flux-schnell-image",
       "legacy_model_ids": [
+        "comfyui-flux-schnell-i2i",
+        "comfyui-flux-schnell-image",
         "comfyui-flux-schnell-t2i"
       ],
       "modes": [
+        "comfyui/comfyui-flux-schnell-image#i2i",
+        "comfyui/comfyui-flux-schnell-image#image",
         "comfyui/comfyui-flux-schnell-image#t2i"
       ],
       "provider": "local",
@@ -2661,6 +2669,161 @@
     }
   },
   "models": {
+    "comfyui-flux-schnell-i2i": {
+      "backend_env_key": null,
+      "capabilities": [
+        "i2i"
+      ],
+      "credential_sources": {
+        "comfyui": [
+          "COMFYUI_BASE_URL"
+        ]
+      },
+      "default_backend": "comfyui",
+      "description": "本地图生图（复用文生图工作流，参考图作为提示词上下文）",
+      "display_name": "ComfyUI Flux.1 Schnell I2I",
+      "docs": {
+        "context_hub_doc_ids": [
+          "comfyui/workflows"
+        ],
+        "official_snapshot_ids": [
+          "comfyui/2026-08-30"
+        ]
+      },
+      "duration": null,
+      "family": "comfyui",
+      "id": "comfyui-flux-schnell-i2i",
+      "inputs": {
+        "reference_images": {
+          "max": 1
+        }
+      },
+      "params": {
+        "seed": true,
+        "size": {
+          "default": "1024*1024",
+          "options": [
+            "1024*1024",
+            "1024*576",
+            "576*1024",
+            "1152*896",
+            "896*1152"
+          ]
+        }
+      },
+      "provider": "local",
+      "release_stage": "local",
+      "routing_prefixes": [
+        "comfyui-",
+        "comfyui/"
+      ],
+      "status": "active",
+      "supported_backends": [
+        "comfyui"
+      ],
+      "transport": {
+        "audio_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "image_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "reference_video_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        }
+      },
+      "ui": {
+        "badges": [
+          "local"
+        ],
+        "order": 170,
+        "recommended": false,
+        "selection_group": "i2i",
+        "visible_in": [
+          "project_settings",
+          "series_settings",
+          "global_settings"
+        ]
+      }
+    },
+    "comfyui-flux-schnell-image": {
+      "backend_env_key": null,
+      "capabilities": [
+        "t2i",
+        "i2i"
+      ],
+      "credential_sources": {
+        "comfyui": [
+          "COMFYUI_BASE_URL"
+        ]
+      },
+      "default_backend": "comfyui",
+      "description": "本地图像生成（T2I/I2I 通用）",
+      "display_name": "ComfyUI Flux.1 Schnell Image",
+      "docs": {
+        "context_hub_doc_ids": [
+          "comfyui/workflows"
+        ],
+        "official_snapshot_ids": [
+          "comfyui/2026-08-30"
+        ]
+      },
+      "duration": null,
+      "family": "comfyui",
+      "id": "comfyui-flux-schnell-image",
+      "inputs": {
+        "reference_images": {
+          "max": 1
+        }
+      },
+      "params": {
+        "seed": true,
+        "size": {
+          "default": "1024*1024",
+          "options": [
+            "1024*1024",
+            "1024*576",
+            "576*1024",
+            "1152*896",
+            "896*1152"
+          ]
+        }
+      },
+      "provider": "local",
+      "release_stage": "local",
+      "routing_prefixes": [
+        "comfyui-",
+        "comfyui/"
+      ],
+      "status": "active",
+      "supported_backends": [
+        "comfyui"
+      ],
+      "transport": {
+        "audio_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "image_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "reference_video_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        }
+      },
+      "ui": {
+        "badges": [
+          "local"
+        ],
+        "order": 170,
+        "recommended": false,
+        "selection_group": "image",
+        "visible_in": [
+          "project_settings",
+          "series_settings",
+          "global_settings"
+        ]
+      }
+    },
     "comfyui-flux-schnell-t2i": {
       "backend_env_key": null,
       "capabilities": [
@@ -6534,6 +6697,169 @@
     }
   },
   "modes": {
+    "comfyui/comfyui-flux-schnell-image#i2i": {
+      "backend_env_key": null,
+      "capabilities": [
+        "i2i"
+      ],
+      "credential_sources": {
+        "comfyui": [
+          "COMFYUI_BASE_URL"
+        ]
+      },
+      "default_backend": "comfyui",
+      "description": "本地图生图（复用文生图工作流，参考图作为提示词上下文）",
+      "display_name": "ComfyUI Flux.1 Schnell I2I",
+      "docs": {
+        "context_hub_doc_ids": [
+          "comfyui/workflows"
+        ],
+        "official_snapshot_ids": [
+          "comfyui/2026-08-30"
+        ]
+      },
+      "duration": null,
+      "family": "comfyui",
+      "id": "comfyui/comfyui-flux-schnell-image#i2i",
+      "inputs": {
+        "reference_images": {
+          "max": 1
+        }
+      },
+      "legacy_model_id": "comfyui-flux-schnell-i2i",
+      "mode": "i2i",
+      "model_line_id": "comfyui/comfyui-flux-schnell-image",
+      "params": {
+        "seed": true,
+        "size": {
+          "default": "1024*1024",
+          "options": [
+            "1024*1024",
+            "1024*576",
+            "576*1024",
+            "1152*896",
+            "896*1152"
+          ]
+        }
+      },
+      "provider": "local",
+      "release_stage": "local",
+      "routing_prefixes": [
+        "comfyui-",
+        "comfyui/"
+      ],
+      "runtime": {},
+      "status": "active",
+      "supported_backends": [
+        "comfyui"
+      ],
+      "transport": {
+        "audio_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "image_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "reference_video_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        }
+      },
+      "ui": {
+        "badges": [
+          "local"
+        ],
+        "order": 170,
+        "recommended": false,
+        "selection_group": "i2i",
+        "visible_in": [
+          "project_settings",
+          "series_settings",
+          "global_settings"
+        ]
+      }
+    },
+    "comfyui/comfyui-flux-schnell-image#image": {
+      "backend_env_key": null,
+      "capabilities": [
+        "t2i",
+        "i2i"
+      ],
+      "credential_sources": {
+        "comfyui": [
+          "COMFYUI_BASE_URL"
+        ]
+      },
+      "default_backend": "comfyui",
+      "description": "本地图像生成（T2I/I2I 通用）",
+      "display_name": "ComfyUI Flux.1 Schnell Image",
+      "docs": {
+        "context_hub_doc_ids": [
+          "comfyui/workflows"
+        ],
+        "official_snapshot_ids": [
+          "comfyui/2026-08-30"
+        ]
+      },
+      "duration": null,
+      "family": "comfyui",
+      "id": "comfyui/comfyui-flux-schnell-image#image",
+      "inputs": {
+        "reference_images": {
+          "max": 1
+        }
+      },
+      "legacy_model_id": "comfyui-flux-schnell-image",
+      "mode": "image",
+      "model_line_id": "comfyui/comfyui-flux-schnell-image",
+      "params": {
+        "seed": true,
+        "size": {
+          "default": "1024*1024",
+          "options": [
+            "1024*1024",
+            "1024*576",
+            "576*1024",
+            "1152*896",
+            "896*1152"
+          ]
+        }
+      },
+      "provider": "local",
+      "release_stage": "local",
+      "routing_prefixes": [
+        "comfyui-",
+        "comfyui/"
+      ],
+      "runtime": {},
+      "status": "active",
+      "supported_backends": [
+        "comfyui"
+      ],
+      "transport": {
+        "audio_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "image_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        },
+        "reference_video_input_mode": {
+          "comfyui": "comfyui_local_upload"
+        }
+      },
+      "ui": {
+        "badges": [
+          "local"
+        ],
+        "order": 170,
+        "recommended": false,
+        "selection_group": "image",
+        "visible_in": [
+          "project_settings",
+          "series_settings",
+          "global_settings"
+        ]
+      }
+    },
     "comfyui/comfyui-flux-schnell-image#t2i": {
       "backend_env_key": null,
       "capabilities": [

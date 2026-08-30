@@ -79,6 +79,8 @@
   },
   "model_overrides": {
     "comfyui-flux-schnell-t2i": "flux_schnell_t2i",
+    "comfyui-flux-schnell-i2i": "flux_schnell_t2i",
+    "comfyui-flux-schnell-image": "flux_schnell_t2i",
     "comfyui-qwen-image-t2i": "qwen_image_t2i",
     "comfyui-h3-i2v": "h3_i2v",
     "comfyui-h3-r2v": "h3_r2v",

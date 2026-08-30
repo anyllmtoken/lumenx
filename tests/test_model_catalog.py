@@ -27,15 +27,14 @@ class TestModelCatalog:
         catalog = build_catalog_dict(MODEL_CATALOG_ROOT)
 
         assert catalog["version"] == 1
-        # Defaults point at the wan2.7 image family plus the HappyHorse 1.1
-        # video line (2026-07 catalog upgrade) and include the unified
-        # image_model surface used by the Atelier/Studio image path.
+        # Defaults point at the local ComfyUI family (Flux Schnell for
+        # images, MiniMax H3 for video) — the all-local default setup.
         assert catalog["defaults"]["model_settings"] == {
-            "t2i_model": "wan2.7-image-pro",
-            "i2i_model": "wan2.7-image-pro",
-            "image_model": "wan2.7-image-pro",
-            "i2v_model": "happyhorse-1.1-i2v",
-            "r2v_model": "happyhorse-1.1-r2v",
+            "t2i_model": "comfyui-flux-schnell-t2i",
+            "i2i_model": "comfyui-flux-schnell-i2i",
+            "image_model": "comfyui-flux-schnell-image",
+            "i2v_model": "comfyui-h3-i2v",
+            "r2v_model": "comfyui-h3-r2v",
         }
 
         models = catalog["models"]
@@ -137,10 +136,10 @@ class TestModelCatalog:
     def test_default_model_settings_come_from_catalog(self):
         defaults = get_default_model_settings(MODEL_CATALOG_ROOT)
 
-        assert defaults.t2i_model == "wan2.7-image-pro"
-        assert defaults.i2i_model == "wan2.7-image-pro"
-        assert defaults.i2v_model == "happyhorse-1.1-i2v"
-        assert defaults.r2v_model == "happyhorse-1.1-r2v"
+        assert defaults.t2i_model == "comfyui-flux-schnell-t2i"
+        assert defaults.i2i_model == "comfyui-flux-schnell-i2i"
+        assert defaults.i2v_model == "comfyui-h3-i2v"
+        assert defaults.r2v_model == "comfyui-h3-r2v"
 
     def test_validation_report_passes_for_repo_catalog(self):
         catalog = build_catalog_dict(MODEL_CATALOG_ROOT)
@@ -149,7 +148,7 @@ class TestModelCatalog:
 
         assert report.ok is True
         assert report.errors == ()
-        assert report.stats["defaults"]["t2i_model"] == "wan2.7-image-pro"
+        assert report.stats["defaults"]["t2i_model"] == "comfyui-flux-schnell-t2i"
         assert report.stats["surface_summary"]["video_sidebar"]["i2v"]
 
     def test_validation_report_detects_frontend_catalog_drift(self):
@@ -165,10 +164,9 @@ class TestModelCatalog:
     def test_validation_report_detects_default_visibility_regression(self):
         catalog = build_catalog_dict(MODEL_CATALOG_ROOT)
         broken_catalog = deepcopy(catalog)
-        # Target the current default I2V model (happyhorse-1.1-i2v after
-        # the HappyHorse 1.0→1.1 upgrade) so the validation actually
-        # fires — older defaults are no longer authoritative.
-        broken_catalog["models"]["happyhorse-1.1-i2v"]["ui"]["visible_in"] = [
+        # Target the current default I2V model (comfyui-h3-i2v) so the
+        # validation actually fires — older defaults are no longer authoritative.
+        broken_catalog["models"]["comfyui-h3-i2v"]["ui"]["visible_in"] = [
             "project_settings",
             "series_settings",
             "global_settings",
