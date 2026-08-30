@@ -1,21 +1,21 @@
 {
   "asset_generation": {
-    "character": "flux_schnell_t2i",
-    "character_multiangle": "flux_schnell_t2i",
-    "scene": "flux_schnell_t2i",
-    "prop": "flux_schnell_t2i",
+    "character": "flux_schnell_full_text_to_image",
+    "character_multiangle": "flux_schnell_full_text_to_image",
+    "scene": "flux_schnell_full_text_to_image",
+    "prop": "flux_schnell_full_text_to_image",
     "enhance": "D20-RAW画质重建Adonis_Workflow"
   },
   "storyboard": {
-    "default": "qwen_image_t2i",
-    "fast": "flux_schnell_t2i"
+    "default": "image_qwen_image_2512_with_2steps_lora",
+    "fast": "flux_schnell_full_text_to_image"
   },
   "video_generation": {
-    "i2v": "h3_i2v",
-    "i2v_alternative": "h3_i2v",
-    "i2v_first_last_frame": "wan2_2_flf2v",
-    "r2v": "h3_r2v",
-    "r2v_v4": "wan_vace_r2v",
+    "i2v": "video_minimax_h3_i2v",
+    "i2v_alternative": "video_minimax_h3_i2v",
+    "i2v_first_last_frame": "video_wan2_2_14B_flf2v",
+    "r2v": "video_minimax_h3_r2v",
+    "r2v_v4": "video_wan_vace_14B_ref2v",
     "ltx_optimized": "H17-文图生视频-LTX2.3全面优化版",
     "ltx_high_dynamic": "H28-LTX2.3-高动态图生视频"
   },
@@ -23,7 +23,7 @@
     "voice_clone": "N2-单人声音克隆FishAudio S2pro"
   },
   "llm_generation": {
-    "text_gen": "qwen3_llm"
+    "text_gen": "llm_qwen3_5_text_gen"
   },
   "node_mapping": {
     "positive_prompt": "49:text",
@@ -33,7 +33,7 @@
     "image": "image"
   },
   "templates": {
-    "flux_schnell_t2i": {
+    "flux_schnell_full_text_to_image": {
       "node_mapping": {
         "positive_prompt": ["41:clip_l", "41:t5xxl"],
         "seed": "31:seed",
@@ -41,7 +41,7 @@
         "height": "27:height"
       }
     },
-    "qwen_image_t2i": {
+    "image_qwen_image_2512_with_2steps_lora": {
       "node_mapping": {
         "positive_prompt": "108:text",
         "seed": "106:seed",
@@ -49,27 +49,27 @@
         "height": "107:height"
       }
     },
-    "h3_i2v": {
+    "video_minimax_h3_i2v": {
       "node_mapping": {
         "image": "137:image",
         "duration": "131:values.a",
         "seed": "129:noise_seed"
       }
     },
-    "h3_r2v": {
+    "video_minimax_h3_r2v": {
       "node_mapping": {
         "reference_image": "137:image",
         "duration": "131:values.a",
         "seed": "129:noise_seed"
       }
     },
-    "wan_vace_r2v": {
+    "video_wan_vace_14B_ref2v": {
       "node_mapping": {
         "reference_image": "73:image",
         "seed": "108:seed"
       }
     },
-    "wan2_2_flf2v": {
+    "video_wan2_2_14B_flf2v": {
       "node_mapping": {
         "image": "80:image",
         "end_image": "89:image",
@@ -78,14 +78,14 @@
     }
   },
   "model_overrides": {
-    "comfyui-flux-schnell-t2i": "flux_schnell_t2i",
-    "comfyui-flux-schnell-i2i": "flux_schnell_t2i",
-    "comfyui-flux-schnell-image": "flux_schnell_t2i",
-    "comfyui-qwen-image-t2i": "qwen_image_t2i",
-    "comfyui-h3-i2v": "h3_i2v",
-    "comfyui-h3-r2v": "h3_r2v",
-    "comfyui-wan-vace-r2v": "wan_vace_r2v",
-    "comfyui-wan2.2-flf2v": "wan2_2_flf2v",
+    "comfyui-flux-schnell-t2i": "flux_schnell_full_text_to_image",
+    "comfyui-flux-schnell-i2i": "flux_schnell_full_text_to_image",
+    "comfyui-flux-schnell-image": "flux_schnell_full_text_to_image",
+    "comfyui-qwen-image-t2i": "image_qwen_image_2512_with_2steps_lora",
+    "comfyui-h3-i2v": "video_minimax_h3_i2v",
+    "comfyui-h3-r2v": "video_minimax_h3_r2v",
+    "comfyui-wan-vace-r2v": "video_wan_vace_14B_ref2v",
+    "comfyui-wan2.2-flf2v": "video_wan2_2_14B_flf2v",
     "comfyui-wan2.2-t2i": "C16-短剧文生图专用-支持场景-角色",
     "comfyui-wan2.2-i2i": "B13-千问角色一键多角度_multiple_character_angles-v1.0",
     "comfyui-wan2.2-i2v": "G03-图生视频-Wan2.2SmoothMix",
