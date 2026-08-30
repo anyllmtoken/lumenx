@@ -97,6 +97,25 @@ class TestComfyUIImageModel:
         assert "reference_image_0" in submitted["upload_files"]
         assert submitted["upload_files"]["reference_image_0"] == str(ref)
 
+    def test_flux_template_node_mapping(self, fake_client, tmp_path):
+        model = ComfyUIImageModel({})
+        out = tmp_path / "flux.png"
+
+        model.generate(
+            "hello world",
+            str(out),
+            model_name="comfyui-flux-schnell-t2i",
+            seed=7,
+            size="1152*896",
+        )
+
+        params = fake_client.submitted[-1]["parameters"]
+        assert params["41:clip_l"] == "hello world"
+        assert params["41:t5xxl"] == "hello world"
+        assert params["31:seed"] == 7
+        assert params["27:width"] == 1152
+        assert params["27:height"] == 896
+
 
 class TestComfyUIVideoModel:
     def test_generate_i2v(self, fake_client, tmp_path):
@@ -157,3 +176,23 @@ class TestComfyUIVideoModel:
         )
 
         assert fake_client.submitted[-1]["workflow_id"] == "H17-文图生视频-LTX2.3全面优化版"
+
+    def test_h3_template_node_mapping(self, fake_client, tmp_path):
+        model = ComfyUIVideoModel({})
+        out = tmp_path / "h3.mp4"
+        image = tmp_path / "frame.png"
+        image.write_bytes(b"frame")
+
+        model.generate(
+            "camera pans",
+            str(out),
+            img_path=str(image),
+            model_name="comfyui-h3-i2v",
+            seed=11,
+            duration=6,
+        )
+
+        params = fake_client.submitted[-1]["parameters"]
+        assert params["137:image"] == "frame.png"
+        assert params["129:noise_seed"] == 11
+        assert params["131:values.a"] == 6

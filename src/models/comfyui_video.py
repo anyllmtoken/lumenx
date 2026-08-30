@@ -116,6 +116,17 @@ class ComfyUIVideoModel:
             except (TypeError, ValueError):
                 logger.debug("Skipping non-JSON ComfyUI video parameter %s", key)
 
+        # Per-template node mapping: pin duration/seed/image/references to the
+        # actual node fields of the resolved workflow.
+        node_map = self._node_map_for(workflow_id)
+        for key in ("duration", "seed", "image", "end_image"):
+            mapped = node_map.get(key)
+            if mapped and key in parameters:
+                parameters[mapped] = parameters.pop(key)
+        ref_mapped = node_map.get("reference_image")
+        if ref_mapped and parameters.get("reference_images"):
+            parameters[ref_mapped] = parameters["reference_images"][0]
+
         task_id = self.comfyui_client.submit_workflow_task(
             workflow_id=workflow_id,
             parameters=parameters,
@@ -138,6 +149,15 @@ class ComfyUIVideoModel:
             raise RuntimeError("ComfyUI returned no generated videos")
         logger.info("ComfyUI video generated: %s", video_path)
         return video_path, time.time() - start
+
+    def _node_map_for(self, workflow_id: Optional[str]) -> Dict[str, Any]:
+        base = dict(self.workflow_mapping.get("node_mapping", {}))
+        if not workflow_id:
+            return base
+        template = self.workflow_mapping.get("templates", {}).get(workflow_id, {})
+        if isinstance(template, dict):
+            base.update(template.get("node_mapping", {}))
+        return base
 
     # ------------------------------------------------------------------
     # Compatibility helpers (fork API)

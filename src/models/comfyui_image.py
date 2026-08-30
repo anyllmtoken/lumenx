@@ -103,6 +103,7 @@ class ComfyUIImageModel:
             seed=kwargs.get("seed"),
             batch_size=kwargs.get("n", kwargs.get("batch_size", 1)),
             ref_strength=kwargs.get("ref_strength", 0.5),
+            workflow_id=workflow_id,
             **handled_kwargs,
         )
 
@@ -282,20 +283,44 @@ class ComfyUIImageModel:
         seed: Optional[int] = None,
         batch_size: int = 1,
         ref_strength: float = 0.5,
+        workflow_id: Optional[str] = None,
         **kwargs,
     ) -> Dict[str, Any]:
-        node_map = self.workflow_mapping.get("node_mapping", {})
-        positive_key = node_map.get("positive_prompt", "49:text")
-        negative_key = node_map.get("negative_prompt", "16:text")
-        parameters: Dict[str, Any] = {
-            positive_key: prompt,
-            negative_key: negative_prompt or "",
-            "batch_size": batch_size,
-        }
+        node_map = self._node_map_for(workflow_id)
+        parameters: Dict[str, Any] = {"batch_size": batch_size}
+
+        positive_keys = node_map.get("positive_prompt", "49:text")
+        if isinstance(positive_keys, list):
+            for key in positive_keys:
+                if key:
+                    parameters[key] = prompt
+        elif positive_keys:
+            parameters[positive_keys] = prompt
+
+        negative_keys = node_map.get("negative_prompt", "16:text")
+        if isinstance(negative_keys, list):
+            for key in negative_keys:
+                if key and negative_prompt:
+                    parameters[key] = negative_prompt
+        elif negative_keys and negative_prompt:
+            parameters[negative_keys] = negative_prompt
+
         effective_size = size or kwargs.get("size") or "1280*1280"
-        parameters["size"] = effective_size
+        width_key = node_map.get("width")
+        height_key = node_map.get("height")
+        if width_key and height_key and "*" in str(effective_size):
+            width_str, height_str = str(effective_size).split("*", 1)
+            try:
+                parameters[width_key] = int(width_str.strip())
+                parameters[height_key] = int(height_str.strip())
+            except ValueError:
+                parameters["size"] = effective_size
+        else:
+            parameters["size"] = effective_size
+
         if seed is not None:
-            parameters["seed"] = seed
+            seed_key = node_map.get("seed", "seed")
+            parameters[seed_key] = seed
         if ref_strength is not None:
             parameters["reference_strength"] = ref_strength
         for key, value in kwargs.items():
@@ -312,6 +337,16 @@ class ComfyUIImageModel:
             except (TypeError, ValueError):
                 logger.debug("Skipping non-JSON ComfyUI parameter %s", key)
         return parameters
+
+    def _node_map_for(self, workflow_id: Optional[str]) -> Dict[str, Any]:
+        """Per-template node mapping, falling back to the global section."""
+        base = dict(self.workflow_mapping.get("node_mapping", {}))
+        if not workflow_id:
+            return base
+        template = self.workflow_mapping.get("templates", {}).get(workflow_id, {})
+        if isinstance(template, dict):
+            base.update(template.get("node_mapping", {}))
+        return base
 
     def _download_first_image(
         self, result: Dict[str, Any], output_path: str

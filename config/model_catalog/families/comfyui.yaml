@@ -163,3 +163,173 @@ models:
           reference_images:
             max: 1
             reference_type: image
+
+  # ── Flux Schnell image (T2I) ───────────────────────────────────────
+  - id: comfyui/comfyui-flux-schnell-image
+    display_name: ComfyUI Flux.1 Schnell 图像
+    description: 本地 Flux.1 Schnell 文生图（4 步快速出图，3090 友好）
+    status: active
+    release_stage: local
+    docs:
+      context_hub_doc_ids: [comfyui/workflows]
+    modes:
+      t2i:
+        legacy_id: comfyui-flux-schnell-t2i
+        display_name: ComfyUI Flux.1 Schnell T2I
+        description: 本地文生图，4 步采样，质量/速度均衡
+        capabilities: [t2i]
+        ui:
+          selection_group: t2i
+          visible_in: [project_settings, series_settings, global_settings]
+          order: 170
+          badges: [local]
+        params:
+          size:
+            options: ["1024*1024", "1024*576", "576*1024", "1152*896", "896*1152"]
+            default: "1024*1024"
+          seed: true
+
+  # ── Qwen-Image 2512 (T2I, 2-step LoRA) ────────────────────────────
+  - id: comfyui/comfyui-qwen-image-image
+    display_name: ComfyUI Qwen-Image 2512 图像
+    description: 本地 Qwen-Image 2512 + 2 步 LoRA，中文文字渲染强
+    status: active
+    release_stage: local
+    docs:
+      context_hub_doc_ids: [comfyui/workflows]
+    modes:
+      t2i:
+        legacy_id: comfyui-qwen-image-t2i
+        display_name: ComfyUI Qwen-Image 2512 T2I
+        description: 高质量文生图（20B fp8 + 2 步 LoRA，3090 可跑）
+        capabilities: [t2i]
+        ui:
+          selection_group: t2i
+          visible_in: [project_settings, series_settings, global_settings]
+          order: 165
+          badges: [local]
+        params:
+          size:
+            options: ["1024*1024", "1328*1328", "832*1216", "1216*832"]
+            default: "1024*1024"
+          seed: true
+
+  # ── MiniMax H3 video (I2V / R2V) ──────────────────────────────────
+  - id: comfyui/comfyui-minimax-h3-video
+    display_name: ComfyUI MiniMax H3 视频
+    description: 本地 MiniMax H3（int8）图生视频/参考生视频，2K + 原生音轨
+    status: active
+    release_stage: local
+    docs:
+      context_hub_doc_ids: [comfyui/workflows]
+    modes:
+      i2v:
+        legacy_id: comfyui-h3-i2v
+        display_name: ComfyUI MiniMax H3 I2V
+        description: 首帧图生视频（FL2VA int8）
+        capabilities: [i2v]
+        ui:
+          selection_group: i2v
+          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
+          order: 180
+          badges: [local]
+        duration:
+          type: slider
+          min: 5
+          max: 15
+          step: 1
+          default: 5
+        params:
+          seed: true
+        inputs:
+          reference_images:
+            max: 1
+            reference_type: image
+      r2v:
+        legacy_id: comfyui-h3-r2v
+        display_name: ComfyUI MiniMax H3 R2V
+        description: 多模态参考生视频（图/视频/音频，Ref2VA int8）
+        capabilities: [r2v]
+        ui:
+          selection_group: r2v
+          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
+          order: 180
+          badges: [local]
+        duration:
+          type: slider
+          min: 5
+          max: 15
+          step: 1
+          default: 5
+        params:
+          seed: true
+        inputs:
+          reference_images:
+            max: 3
+            reference_type: video
+
+  # ── Wan VACE video (R2V) ───────────────────────────────────────────
+  - id: comfyui/comfyui-wan-vace-video
+    display_name: ComfyUI Wan VACE 14B 视频
+    description: 本地 Wan VACE 14B 参考生视频（平铺工作流，可转换）
+    status: active
+    release_stage: local
+    docs:
+      context_hub_doc_ids: [comfyui/workflows]
+    modes:
+      r2v:
+        legacy_id: comfyui-wan-vace-r2v
+        display_name: ComfyUI Wan VACE 14B R2V
+        description: 参考图/视频混合引导的参考生视频
+        capabilities: [r2v]
+        ui:
+          selection_group: r2v
+          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
+          order: 170
+          badges: [local]
+        duration:
+          type: slider
+          min: 3
+          max: 10
+          step: 1
+          default: 5
+        params:
+          seed: true
+          negativePrompt: true
+        inputs:
+          reference_images:
+            max: 1
+            reference_type: image
+
+  # ── Wan 2.2 14B First-Last-Frame (I2V) ────────────────────────────
+  - id: comfyui/comfyui-wan2.2-flf-video
+    display_name: ComfyUI Wan 2.2 14B 首尾帧
+    description: 本地 Wan 2.2 14B 首尾帧视频（fp8，平铺工作流）
+    status: active
+    release_stage: local
+    docs:
+      context_hub_doc_ids: [comfyui/workflows]
+    modes:
+      i2v:
+        legacy_id: comfyui-wan2.2-flf2v
+        display_name: ComfyUI Wan 2.2 首尾帧 I2V
+        description: 首帧+尾帧约束的视频生成
+        capabilities: [i2v]
+        ui:
+          selection_group: i2v
+          visible_in: [project_settings, series_settings, video_sidebar, global_settings]
+          order: 165
+          badges: [local]
+        duration:
+          type: slider
+          min: 2
+          max: 10
+          step: 1
+          default: 5
+        params:
+          seed: true
+          negativePrompt: true
+        inputs:
+          reference_images:
+            max: 2
+            reference_type: image

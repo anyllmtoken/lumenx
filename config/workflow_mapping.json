@@ -1,21 +1,21 @@
 {
   "asset_generation": {
-    "character": "C16-短剧文生图专用-支持场景-角色",
-    "character_multiangle": "B13-千问角色一键多角度_multiple_character_angles-v1.0",
-    "scene": "C16-短剧文生图专用-支持场景-角色",
-    "prop": "C16-短剧文生图专用-支持场景-角色",
+    "character": "flux_schnell_t2i",
+    "character_multiangle": "flux_schnell_t2i",
+    "scene": "flux_schnell_t2i",
+    "prop": "flux_schnell_t2i",
     "enhance": "D20-RAW画质重建Adonis_Workflow"
   },
   "storyboard": {
-    "default": "C16-短剧文生图专用-支持场景-角色",
-    "fast": "C07-文生图-Zimage-Nunchaku加速"
+    "default": "qwen_image_t2i",
+    "fast": "flux_schnell_t2i"
   },
   "video_generation": {
-    "i2v": "G03-图生视频-Wan2.2SmoothMix",
-    "i2v_alternative": "G10-图生视频-Wan2.2SmoothMixV2",
-    "i2v_first_last_frame": "G02-首尾帧-Wan2.2首尾帧视频",
-    "r2v": "P02-动作迁移-Wan2.2Animate角色迁移",
-    "r2v_v4": "P07-动作迁移-Wan2.2AnimateV4",
+    "i2v": "h3_i2v",
+    "i2v_alternative": "h3_i2v",
+    "i2v_first_last_frame": "wan2_2_flf2v",
+    "r2v": "h3_r2v",
+    "r2v_v4": "wan_vace_r2v",
     "ltx_optimized": "H17-文图生视频-LTX2.3全面优化版",
     "ltx_high_dynamic": "H28-LTX2.3-高动态图生视频"
   },
@@ -29,7 +29,58 @@
     "batch_size": "batch_size",
     "image": "image"
   },
+  "templates": {
+    "flux_schnell_t2i": {
+      "node_mapping": {
+        "positive_prompt": ["41:clip_l", "41:t5xxl"],
+        "seed": "31:seed",
+        "width": "27:width",
+        "height": "27:height"
+      }
+    },
+    "qwen_image_t2i": {
+      "node_mapping": {
+        "positive_prompt": "108:text",
+        "seed": "106:seed",
+        "width": "107:width",
+        "height": "107:height"
+      }
+    },
+    "h3_i2v": {
+      "node_mapping": {
+        "image": "137:image",
+        "duration": "131:values.a",
+        "seed": "129:noise_seed"
+      }
+    },
+    "h3_r2v": {
+      "node_mapping": {
+        "reference_image": "137:image",
+        "duration": "131:values.a",
+        "seed": "129:noise_seed"
+      }
+    },
+    "wan_vace_r2v": {
+      "node_mapping": {
+        "reference_image": "73:image",
+        "seed": "108:seed"
+      }
+    },
+    "wan2_2_flf2v": {
+      "node_mapping": {
+        "image": "80:image",
+        "end_image": "89:image",
+        "seed": "84:noise_seed"
+      }
+    }
+  },
   "model_overrides": {
+    "comfyui-flux-schnell-t2i": "flux_schnell_t2i",
+    "comfyui-qwen-image-t2i": "qwen_image_t2i",
+    "comfyui-h3-i2v": "h3_i2v",
+    "comfyui-h3-r2v": "h3_r2v",
+    "comfyui-wan-vace-r2v": "wan_vace_r2v",
+    "comfyui-wan2.2-flf2v": "wan2_2_flf2v",
     "comfyui-wan2.2-t2i": "C16-短剧文生图专用-支持场景-角色",
     "comfyui-wan2.2-i2i": "B13-千问角色一键多角度_multiple_character_angles-v1.0",
     "comfyui-wan2.2-i2v": "G03-图生视频-Wan2.2SmoothMix",
