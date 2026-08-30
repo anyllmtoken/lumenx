@@ -68,7 +68,7 @@ class TestComfyUIImageModel:
         path, duration = model.generate(
             "a cinematic scene",
             str(out),
-            model_name="comfyui-wan2.2-t2i",
+            model_name="comfyui-flux-schnell-t2i",
             size="1024*1024",
         )
 
@@ -76,8 +76,9 @@ class TestComfyUIImageModel:
         assert os.path.exists(out)
         assert duration >= 0
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "C16-短剧文生图专用-支持场景-角色"
-        assert submitted["parameters"]["size"] == "1024*1024"
+        assert submitted["workflow_id"] == "flux_schnell_full_text_to_image"
+        assert submitted["parameters"]["27:width"] == 1024
+        assert submitted["parameters"]["27:height"] == 1024
 
     def test_generate_i2i_uploads_reference(self, fake_client, tmp_path):
         model = ComfyUIImageModel({})
@@ -89,11 +90,11 @@ class TestComfyUIImageModel:
             "same character",
             str(out),
             ref_image_path=str(ref),
-            model_name="comfyui-wan2.2-i2i",
+            model_name="comfyui-flux-schnell-i2i",
         )
 
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "B13-千问角色一键多角度_multiple_character_angles-v1.0"
+        assert submitted["workflow_id"] == "flux_schnell_full_text_to_image"
         assert "reference_image_0" in submitted["upload_files"]
         assert submitted["upload_files"]["reference_image_0"] == str(ref)
 
@@ -136,10 +137,10 @@ class TestComfyUIVideoModel:
         assert path == str(out)
         assert os.path.exists(out)
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "G03-图生视频-Wan2.2SmoothMix"
+        assert submitted["workflow_id"] == "video_minimax_h3_i2v"
         assert submitted["parameters"]["prompt"] == "camera pans left"
-        assert submitted["parameters"]["duration"] == 5
-        assert submitted["parameters"]["seed"] == 123
+        assert submitted["parameters"]["131:values.a"] == 5
+        assert submitted["parameters"]["129:noise_seed"] == 123
 
     def test_generate_r2v_uses_reference_video_workflow(self, fake_client, tmp_path):
         model = ComfyUIVideoModel({})
@@ -159,7 +160,7 @@ class TestComfyUIVideoModel:
         )
 
         submitted = fake_client.submitted[-1]
-        assert submitted["workflow_id"] == "P02-动作迁移-Wan2.2Animate角色迁移"
+        assert submitted["workflow_id"] == "video_minimax_h3_r2v"
         assert submitted["parameters"]["reference_videos"] == ["ref.mp4"]
 
     def test_ltx_workflow_override(self, fake_client, tmp_path):
@@ -175,7 +176,7 @@ class TestComfyUIVideoModel:
             model_name="comfyui-ltx2.3-i2v",
         )
 
-        assert fake_client.submitted[-1]["workflow_id"] == "H17-文图生视频-LTX2.3全面优化版"
+        assert fake_client.submitted[-1]["workflow_id"] == "video_ltx2_i2v"
 
     def test_h3_template_node_mapping(self, fake_client, tmp_path):
         model = ComfyUIVideoModel({})

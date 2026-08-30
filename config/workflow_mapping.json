@@ -4,7 +4,7 @@
     "character_multiangle": "flux_schnell_full_text_to_image",
     "scene": "flux_schnell_full_text_to_image",
     "prop": "flux_schnell_full_text_to_image",
-    "enhance": "D20-RAW画质重建Adonis_Workflow"
+    "enhance": "utility_seedvr2_7b_int8_upscale_image"
   },
   "storyboard": {
     "default": "image_qwen_image_2512_with_2steps_lora",
@@ -16,11 +16,11 @@
     "i2v_first_last_frame": "video_wan2_2_14B_flf2v",
     "r2v": "video_minimax_h3_r2v",
     "r2v_v4": "video_wan_vace_14B_ref2v",
-    "ltx_optimized": "H17-文图生视频-LTX2.3全面优化版",
-    "ltx_high_dynamic": "H28-LTX2.3-高动态图生视频"
+    "ltx_optimized": "video_ltx2_i2v",
+    "ltx_high_dynamic": "video_ltx2_i2v"
   },
   "audio_generation": {
-    "voice_clone": "N2-单人声音克隆FishAudio S2pro"
+    "voice_clone": "audio-chatterbox_tts"
   },
   "llm_generation": {
     "text_gen": "llm_qwen3_5_text_gen"
@@ -86,10 +86,10 @@
     "comfyui-h3-r2v": "video_minimax_h3_r2v",
     "comfyui-wan-vace-r2v": "video_wan_vace_14B_ref2v",
     "comfyui-wan2.2-flf2v": "video_wan2_2_14B_flf2v",
-    "comfyui-wan2.2-t2i": "C16-短剧文生图专用-支持场景-角色",
-    "comfyui-wan2.2-i2i": "B13-千问角色一键多角度_multiple_character_angles-v1.0",
-    "comfyui-wan2.2-i2v": "G03-图生视频-Wan2.2SmoothMix",
-    "comfyui-wan2.2-r2v": "P02-动作迁移-Wan2.2Animate角色迁移",
-    "comfyui-ltx2.3-i2v": "H17-文图生视频-LTX2.3全面优化版"
+    "comfyui-wan2.2-t2i": "flux_schnell_full_text_to_image",
+    "comfyui-wan2.2-i2i": "flux_schnell_full_text_to_image",
+    "comfyui-wan2.2-i2v": "video_minimax_h3_i2v",
+    "comfyui-wan2.2-r2v": "video_minimax_h3_r2v",
+    "comfyui-ltx2.3-i2v": "video_ltx2_i2v"
   }
 }
