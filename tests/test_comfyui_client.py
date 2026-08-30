@@ -196,6 +196,28 @@ class TestStandardProtocol:
         assert status["results"][0]["type"] == "image"
         assert status["results"][0]["raw"]["filename"] == "gen.png"
 
+    def test_get_task_status_includes_text_outputs(self):
+        session = FakeSession()
+
+        def respond(method, url, kwargs):
+            return FakeResponse(
+                {
+                    "std-1": {
+                        "status": {"status_str": "success"},
+                        "outputs": {
+                            "3": {"text": ["hello from LLM"]},
+                        },
+                    }
+                }
+            )
+
+        session.respond = respond
+        client = _make_client(session, protocol="standard")
+        status = client.get_task_status("std-1")
+
+        text_items = [r for r in status["results"] if r["type"] == "text"]
+        assert text_items and text_items[0]["raw"]["text"] == "hello from LLM"
+
     def test_get_task_status_pending_when_not_in_history(self):
         session = FakeSession()
 

@@ -127,6 +127,10 @@ class ComfyUIClient:
                 return wf
         return None
 
+    def load_workflow_template(self, workflow_id: str) -> Optional[Dict[str, Any]]:
+        """Load a workflow template (standard mode) by name/relative path."""
+        return self._load_workflow_template(workflow_id)
+
     def find_workflow_by_pattern(self, patterns: Iterable[str]) -> Optional[str]:
         """Return the first workflow id whose id/name contains any pattern."""
         workflows = self.list_workflows()
@@ -563,6 +567,21 @@ class ComfyUIClient:
         for node_id, node_out in outputs.items():
             if not isinstance(node_out, dict):
                 continue
+            for text_key in ("text", "string", "output"):
+                if text_key not in node_out:
+                    continue
+                value = node_out[text_key]
+                items = value if isinstance(value, list) else [value]
+                for item in items:
+                    if isinstance(item, str):
+                        results.append(
+                            {
+                                "type": "text",
+                                "url": "",
+                                "raw": {"text": item},
+                                "node_id": node_id,
+                            }
+                        )
             for media_key, media_type in (
                 ("images", "image"),
                 ("videos", "video"),

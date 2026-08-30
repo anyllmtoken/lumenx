@@ -22,6 +22,9 @@
   "audio_generation": {
     "voice_clone": "N2-单人声音克隆FishAudio S2pro"
   },
+  "llm_generation": {
+    "text_gen": "qwen3_llm"
+  },
   "node_mapping": {
     "positive_prompt": "49:text",
     "negative_prompt": "16:text",

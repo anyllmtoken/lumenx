@@ -30,13 +30,19 @@ class LLMAdapter:
     """Unified LLM call interface supporting DashScope and OpenAI-compatible APIs."""
 
     def __init__(self):
-        default_provider = "openai" if os.getenv("LLM_BASE_URL") else "dashscope"
+        default_provider = (
+            "comfyui"
+            if os.getenv("COMFYUI_LLM_ENABLED", "").strip().lower() in ("1", "true", "yes", "on")
+            else ("openai" if os.getenv("LLM_BASE_URL") else "dashscope")
+        )
         self.provider = os.getenv("LLM_PROVIDER", default_provider).lower()
         self._client = None
         logger.info(f"LLM Adapter initialized with provider: {self.provider}")
 
     @property
     def is_configured(self) -> bool:
+        if self.provider == "comfyui":
+            return True
         if self.provider == "openai":
             return bool(os.getenv("OPENAI_API_KEY") or os.getenv("LLM_API_KEY"))
         return bool(os.getenv("DASHSCOPE_API_KEY"))
@@ -74,6 +80,8 @@ class LLMAdapter:
     _DASHSCOPE_MODEL_FALLBACK_CHAIN = ["qwen3.7-plus", "qwen3.6-plus", "qwen-plus"]
 
     def _get_default_model(self) -> str:
+        if self.provider == "comfyui":
+            return os.getenv("COMFYUI_LLM_MODEL", "comfyui-local")
         if self.provider == "openai":
             return (
                 os.getenv("OPENAI_MODEL")
@@ -102,6 +110,15 @@ class LLMAdapter:
         Raises:
             RuntimeError: If the API call fails.
         """
+        if self.provider == "comfyui":
+            from ...models.comfyui_llm import ComfyUILanguageModel
+
+            return ComfyUILanguageModel().chat(
+                messages=messages,
+                model=model,
+                response_format=response_format,
+            )
+
         client = self._get_client()
 
         # 显式 model override 路径：单次尝试，失败就抛。
