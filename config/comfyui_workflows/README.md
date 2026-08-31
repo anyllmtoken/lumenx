@@ -13,7 +13,7 @@
 | `video_minimax_h3_i2v.json` | 图生视频 I2V（FL2VA int8） |
 | `video_minimax_h3_r2v.json` | 参考生视频 R2V（Ref2VA int8） |
 | `video_minimax_h3_t2v.json` | 文生视频 T2V（复用 FL2VA） |
-| `llm_qwen3_5_text_gen.json` | LLM 剧本分析/提示词润色 |
+| `llm_qwen3vl_text_gen.json` | LLM 剧本分析/提示词润色（Qwen3-VL 4B 文本生成，已去除图片输入） |
 
 这些是 Comfy-Org 官方模板库的**原始 UI 格式**模板：
 
