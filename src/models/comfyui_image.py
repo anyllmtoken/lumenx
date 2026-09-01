@@ -107,18 +107,12 @@ class ComfyUIImageModel:
             **handled_kwargs,
         )
 
-        upload_files: Dict[str, str] = {}
         if has_reference:
-            upload_files = {
-                f"reference_image_{idx}": path
-                for idx, path in enumerate(all_ref_paths)
-                if os.path.isfile(path)
-            }
+            self._inject_reference_images(parameters, workflow_id, all_ref_paths)
 
         task_id = self.comfyui_client.submit_workflow_task(
             workflow_id=workflow_id,
             parameters=parameters,
-            upload_files=upload_files or None,
         )
         if not task_id:
             raise RuntimeError("Failed to submit image generation task to ComfyUI")
@@ -347,6 +341,36 @@ class ComfyUIImageModel:
         if isinstance(template, dict):
             base.update(template.get("node_mapping", {}))
         return base
+
+    def _inject_reference_images(
+        self,
+        parameters: Dict[str, Any],
+        workflow_id: Optional[str],
+        ref_paths: List[str],
+    ) -> None:
+        """Upload reference images and wire their filenames into the workflow."""
+        node_map = self._node_map_for(workflow_id)
+        mapped = node_map.get("reference_image")
+        if not mapped:
+            logger.warning(
+                "ComfyUI workflow %s has no 'reference_image' node mapping; "
+                "reference image will not be sent",
+                workflow_id,
+            )
+            return
+        filenames: List[str] = []
+        for path in ref_paths:
+            if not os.path.isfile(path):
+                continue
+            uploaded = self.comfyui_client.upload_file(path)
+            if uploaded and uploaded.get("filename"):
+                filenames.append(uploaded["filename"])
+        if not filenames:
+            return
+        parameters[mapped] = filenames[0]
+        mapped_2 = node_map.get("reference_image_1")
+        if mapped_2:
+            parameters[mapped_2] = filenames[1] if len(filenames) > 1 else filenames[0]
 
     def _download_first_image(
         self, result: Dict[str, Any], output_path: str

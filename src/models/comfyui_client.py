@@ -407,6 +407,7 @@ class ComfyUIClient:
     def _template_dirs(self) -> List[Path]:
         root = _repo_root()
         return [
+            root / "config" / "comfyui_api",
             root / "config" / "comfyui_workflows",
             root / "config" / "workflow_templates",
         ]
@@ -519,7 +520,9 @@ class ComfyUIClient:
                         key,
                     )
                 continue
-            node_id, _, field = key.partition(separator)
+            # Use rpartition so subgraph node ids containing ":" work, e.g.
+            # "75:73:noise_seed" -> node "75:73", field "noise_seed".
+            node_id, _, field = key.rpartition(separator)
             node = prompt.get(node_id)
             if not isinstance(node, dict):
                 logger.warning("ComfyUI workflow has no node %r for parameter %r", node_id, key)

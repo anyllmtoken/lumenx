@@ -77,9 +77,10 @@ class TestComfyUIImageModel:
         assert duration >= 0
         submitted = fake_client.submitted[-1]
         assert submitted["workflow_id"] == "image_flux2_klein_text_to_image"
-        assert submitted["parameters"]["size"] == "1024*1024"
+        assert submitted["parameters"]["75:68:value"] == 1024
+        assert submitted["parameters"]["75:69:value"] == 1024
 
-    def test_generate_i2i_uploads_reference(self, fake_client, tmp_path):
+    def test_generate_i2i_injects_reference_image(self, fake_client, tmp_path):
         model = ComfyUIImageModel({})
         ref = tmp_path / "ref.png"
         ref.write_bytes(b"ref")
@@ -94,8 +95,8 @@ class TestComfyUIImageModel:
 
         submitted = fake_client.submitted[-1]
         assert submitted["workflow_id"] == "image_flux2_klein_image_edit_4b_distilled"
-        assert "reference_image_0" in submitted["upload_files"]
-        assert submitted["upload_files"]["reference_image_0"] == str(ref)
+        assert submitted["parameters"]["76:image"] == "ref.png"
+        assert (str(ref), "input") in fake_client.uploaded
 
 
 class TestComfyUIVideoModel:
@@ -118,9 +119,9 @@ class TestComfyUIVideoModel:
         assert os.path.exists(out)
         submitted = fake_client.submitted[-1]
         assert submitted["workflow_id"] == "video_minimax_h3_i2v"
-        assert submitted["parameters"]["prompt"] == "camera pans left"
-        assert submitted["parameters"]["131:values.a"] == 5
-        assert submitted["parameters"]["129:noise_seed"] == 123
+        assert submitted["parameters"]["105:104:prompt"] == "camera pans left"
+        assert submitted["parameters"]["105:111:value"] == 5
+        assert submitted["parameters"]["105:15:noise_seed"] == 123
 
     def test_generate_r2v_uses_reference_video_workflow(self, fake_client, tmp_path):
         model = ComfyUIVideoModel({})
@@ -141,7 +142,11 @@ class TestComfyUIVideoModel:
 
         submitted = fake_client.submitted[-1]
         assert submitted["workflow_id"] == "video_minimax_h3_r2v"
-        assert submitted["parameters"]["reference_videos"] == ["ref.mp4"]
+        assert submitted["parameters"]["138:value"] == "mirror the reference motion"
+        assert submitted["parameters"]["137:image"] == "frame.png"
+        assert submitted["parameters"]["139:image"] == "frame.png"
+        assert "reference_videos" not in submitted["parameters"]
+        assert "image" not in submitted["parameters"]
 
     def test_h3_template_node_mapping(self, fake_client, tmp_path):
         model = ComfyUIVideoModel({})
@@ -159,6 +164,6 @@ class TestComfyUIVideoModel:
         )
 
         params = fake_client.submitted[-1]["parameters"]
-        assert params["137:image"] == "frame.png"
-        assert params["129:noise_seed"] == 11
-        assert params["131:values.a"] == 6
+        assert params["114:image"] == "frame.png"
+        assert params["105:15:noise_seed"] == 11
+        assert params["105:111:value"] == 6

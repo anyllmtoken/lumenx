@@ -28,18 +28,46 @@
     "image": "image"
   },
   "templates": {
+    "image_flux2_klein_text_to_image": {
+      "node_mapping": {
+        "positive_prompt": "76:value",
+        "negative_prompt": "75:67:text",
+        "seed": "75:73:noise_seed",
+        "batch_size": "75:66:batch_size",
+        "width": "75:68:value",
+        "height": "75:69:value"
+      }
+    },
+    "image_flux2_klein_image_edit_4b_distilled": {
+      "node_mapping": {
+        "positive_prompt": "75:74:text",
+        "seed": "75:73:noise_seed",
+        "batch_size": "75:66:batch_size",
+        "reference_image": "76:image"
+      }
+    },
     "video_minimax_h3_i2v": {
       "node_mapping": {
-        "image": "137:image",
-        "duration": "131:values.a",
-        "seed": "129:noise_seed"
+        "prompt": "105:104:prompt",
+        "image": "114:image",
+        "duration": "105:111:value",
+        "seed": "105:15:noise_seed"
       }
     },
     "video_minimax_h3_r2v": {
       "node_mapping": {
+        "prompt": "138:value",
         "reference_image": "137:image",
-        "duration": "131:values.a",
+        "reference_image_1": "139:image",
+        "duration": "132:value",
         "seed": "129:noise_seed"
+      }
+    },
+    "video_minimax_h3_t2v": {
+      "node_mapping": {
+        "prompt": "140:131:prompt",
+        "duration": "140:133:value",
+        "seed": "140:129:noise_seed"
       }
     }
   },

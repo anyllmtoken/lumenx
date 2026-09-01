@@ -119,13 +119,27 @@ class ComfyUIVideoModel:
         # Per-template node mapping: pin duration/seed/image/references to the
         # actual node fields of the resolved workflow.
         node_map = self._node_map_for(workflow_id)
-        for key in ("duration", "seed", "image", "end_image"):
+        for key in ("prompt", "duration", "seed", "image", "end_image"):
             mapped = node_map.get(key)
             if mapped and key in parameters:
                 parameters[mapped] = parameters.pop(key)
+
+        # Reference images (r2v): fill the mapped LoadImage slot(s). When the
+        # caller only provided a main image (typical LumenX r2v call), reuse it
+        # so the workflow never runs with its bundled sample image.
+        refs = parameters.get("reference_images") or []
+        if not refs and mode == "r2v" and parameters.get("image"):
+            refs = [parameters["image"]]
         ref_mapped = node_map.get("reference_image")
-        if ref_mapped and parameters.get("reference_images"):
-            parameters[ref_mapped] = parameters["reference_images"][0]
+        if refs and ref_mapped:
+            parameters[ref_mapped] = refs[0]
+            ref_mapped_1 = node_map.get("reference_image_1")
+            if ref_mapped_1:
+                parameters[ref_mapped_1] = refs[1] if len(refs) > 1 else refs[0]
+        parameters.pop("reference_images", None)
+        parameters.pop("reference_videos", None)
+        if mode == "r2v":
+            parameters.pop("image", None)
 
         task_id = self.comfyui_client.submit_workflow_task(
             workflow_id=workflow_id,

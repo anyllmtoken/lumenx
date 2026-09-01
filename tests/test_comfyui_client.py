@@ -253,6 +253,18 @@ class TestStandardProtocol:
         assert result["10"]["inputs"]["seed"] == 1
         assert result["11"]["inputs"]["seed"] == 2
 
+    def test_apply_input_values_subgraph_composite_node_id(self):
+        workflow = {
+            "75:73": {"class_type": "RandomNoise", "inputs": {"noise_seed": 0}},
+            "105:104": {"class_type": "MiniMaxH3ImageToVideo", "inputs": {"prompt": "old"}},
+        }
+        result = ComfyUIClient._apply_input_values(
+            workflow,
+            {"75:73:noise_seed": 42, "105:104:prompt": "new prompt"},
+        )
+        assert result["75:73"]["inputs"]["noise_seed"] == 42
+        assert result["105:104"]["inputs"]["prompt"] == "new prompt"
+
     def test_standard_submit_wires_uploaded_file_into_node(self, tmp_path):
         session = FakeSession()
         captured = {}

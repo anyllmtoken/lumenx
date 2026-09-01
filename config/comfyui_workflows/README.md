@@ -20,5 +20,6 @@
 - 在 ComfyUI 界面中打开（可看模板、下载模型、预览）；
 - 在 ComfyUI 中 **Save (API Format)** 导出后**覆盖同名文件**，即变成 LumenX 可提交的 API 格式。
 
-`config/workflow_mapping.json` 已指向这些文件名，导出后覆盖同名即可，映射无需再改。
-若导出时另存新名，请同步更新映射。
+> **运行时加载顺序**：`config/comfyui_api/`（API 格式导出）优先，其次才是本目录。
+> 请把导出的 API 文件放到 `config/comfyui_api/`，文件名与 `config/workflow_mapping.json`
+> 保持一致；若导出时另存新名，请同步更新映射。
